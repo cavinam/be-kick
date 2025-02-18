@@ -34,7 +34,6 @@ const verifyRefreshToken = (req, res, next) => {
     try {
         const { authorization } = req.headers;
         const token = String(authorization || "").split("Bearer ")[1];
-        console.log(token);
         const verfiedUser = (0, jsonwebtoken_1.verify)(token, config_1.refresh_jwt_secret);
         req.user = verfiedUser; // {}
         next();

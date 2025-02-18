@@ -21,7 +21,7 @@ const generateAuthToken = (user, email) => __awaiter(void 0, void 0, void 0, fun
         throw new response_handler_1.ErrorHandler("wrong email", 401);
     delete existingUser.password;
     const access_token = (0, jsonwebtoken_1.sign)(existingUser, config_1.jwt_secret, {
-        expiresIn: "1m",
+        expiresIn: "30m",
     });
     const refresh_token = (0, jsonwebtoken_1.sign)({ email: existingUser.email }, config_1.refresh_jwt_secret, {
         expiresIn: "1h",

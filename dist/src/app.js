@@ -8,8 +8,9 @@ exports.App = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const config_1 = require("./config");
-const product_controller_1 = require("./routers/product.controller");
+const product_router_1 = require("./routers/product.router");
 const auth_router_1 = require("./routers/auth.router");
+const cart_router_1 = require("./routers/cart.router");
 class App {
     constructor() {
         this.app = (0, express_1.default)();
@@ -18,13 +19,16 @@ class App {
         this.handleError();
     }
     routes() {
-        this.app.use("/api/products", (0, product_controller_1.productRouter)());
+        this.app.use("/api/products", (0, product_router_1.productRouter)());
         this.app.use("/api/auth", (0, auth_router_1.authRouter)());
+        this.app.use("/api/carts", (0, cart_router_1.cartRouter)());
     }
     configure() {
         this.app.use(express_1.default.json()); // accessing req.body (json)
         // this.app.use(express.urlencoded());
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: ["http://localhost:3000", "https://fe-kick.vercel.app"],
+        }));
     }
     handleError() {
         //not found handler

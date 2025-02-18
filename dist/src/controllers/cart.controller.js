@@ -14,59 +14,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const response_handler_1 = require("../helpers/response.handler");
-const product_service_1 = __importDefault(require("../services/product.service"));
-class ProductController {
-    createProduct(req, res, next) {
+const cart_service_1 = __importDefault(require("../services/cart.service"));
+class CartController {
+    addToCart(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield product_service_1.default.create(req);
-                (0, response_handler_1.responseHandler)(res, "new product has been created", undefined, 201);
+                yield cart_service_1.default.addToCart(req);
+                (0, response_handler_1.responseHandler)(res, "new product has been added to cart", undefined, 201);
             }
             catch (error) {
                 next(error);
             }
         });
     }
-    updateProduct(req, res, next) {
+    getUserCart(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield product_service_1.default.update(req);
-                (0, response_handler_1.responseHandler)(res, "new product has been updated");
+                const data = yield cart_service_1.default.getUserCart(req);
+                (0, response_handler_1.responseHandler)(res, "fetching cart", data);
             }
             catch (error) {
                 next(error);
             }
         });
     }
-    deleteProduct(req, res, next) {
+    deleteCart(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield product_service_1.default.delete(req);
-                (0, response_handler_1.responseHandler)(res, "product has been deleted");
+                yield cart_service_1.default.deleteCart(req);
+                (0, response_handler_1.responseHandler)(res, "product has been deleted from your cart");
             }
             catch (error) {
                 next(error);
             }
         });
     }
-    getProducts(req, res, next) {
+    checkout(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield product_service_1.default.getList(req);
-                (0, response_handler_1.responseHandler)(res, "fetching products", data);
+                const token = yield cart_service_1.default.checkout(req);
+                (0, response_handler_1.responseHandler)(res, "your transaction has been created, please proceed your payment through midtrans", token);
             }
             catch (error) {
                 next(error);
             }
         });
     }
-    getProductBySlug(req, res, next) {
+    updatePayment(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield product_service_1.default.getBySlug(req);
-                if (!data)
-                    throw new response_handler_1.ErrorHandler("product not found", 404);
-                (0, response_handler_1.responseHandler)(res, "fetching product with slug", data);
+                yield cart_service_1.default.updatePaymentStatus(req);
+                (0, response_handler_1.responseHandler)(res, "your payment status has been updated");
             }
             catch (error) {
                 next(error);
@@ -74,4 +72,4 @@ class ProductController {
         });
     }
 }
-exports.default = new ProductController();
+exports.default = new CartController();
